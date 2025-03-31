@@ -16,6 +16,9 @@ private:
     void callback(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg);
     rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr subscription_;
     rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_;
+
+    std::string pub_topic_;
+    std::string sub_topic_;
 };
 
 #endif  // LIVOX_TO_POINTCLOUD2_HPP
