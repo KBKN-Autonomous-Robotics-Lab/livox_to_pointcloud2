@@ -4,9 +4,12 @@ using namespace std::chrono_literals;
 
 LivoxToPointCloud2::LivoxToPointCloud2() : Node("livox_to_pointcloud2")
 {
-    publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("converted_pointcloud2", 10);
+    pub_topic_ = this->declare_parameter<std::string>("pub_topic", "/converted_pointcloud2");
+    sub_topic_ = this->declare_parameter<std::string>("sub_topic", "/livox/lidar");
+
+    publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(pub_topic_, 10);
     subscription_ = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
-        "livox_pointcloud", 10, std::bind(&LivoxToPointCloud2::callback, this, std::placeholders::_1));
+        sub_topic_, 10, std::bind(&LivoxToPointCloud2::callback, this, std::placeholders::_1));
 }
 
 void LivoxToPointCloud2::callback(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg)
