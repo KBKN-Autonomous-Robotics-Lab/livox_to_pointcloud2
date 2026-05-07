@@ -16,7 +16,7 @@ void LivoxToPointCloud2::callback(const livox_ros_driver2::msg::CustomMsg::Share
 {
     sensor_msgs::msg::PointCloud2 output;
     output.header = msg->header;
-    output.fields.resize(6);
+    output.fields.resize(7);
 
     output.fields[0].name = "x";
     output.fields[0].offset = 0;
@@ -47,8 +47,13 @@ void LivoxToPointCloud2::callback(const livox_ros_driver2::msg::CustomMsg::Share
     output.fields[5].offset = 17;
     output.fields[5].datatype = sensor_msgs::msg::PointField::UINT8;
     output.fields[5].count = 1;
+    
+    output.fields[6].name = "time";
+    output.fields[6].offset = 18;
+    output.fields[6].datatype = sensor_msgs::msg::PointField::FLOAT32;
+    output.fields[6].count = 1;
 
-    output.point_step = 18;
+    output.point_step = 22; //18
     output.row_step = output.point_step * msg->point_num;
     output.data.resize(output.row_step);
 
@@ -61,6 +66,7 @@ void LivoxToPointCloud2::callback(const livox_ros_driver2::msg::CustomMsg::Share
         *(reinterpret_cast<float*>(raw_data_ptr + 12)) = static_cast<float>(point.reflectivity);
         *(raw_data_ptr + 16) = point.tag;
         *(raw_data_ptr + 17) = point.line;
+        *(reinterpret_cast<float*>(raw_data_ptr + 18)) = point.offset_time * 1e-9f;
 
         raw_data_ptr += output.point_step;
     }
