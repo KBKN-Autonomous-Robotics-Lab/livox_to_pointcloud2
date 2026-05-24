@@ -33,12 +33,25 @@ def generate_launch_description():
         }],
         output='screen'
     )
+    # lidar2 node
+    livox_to_pointcloud2_node_lidar2 = Node(
+        package='livox_to_pointcloud2',
+        executable='livox_to_pointcloud2_node',
+        name='livox_to_pointcloud2_lidar2', 
+        parameters=[{
+            'use_sim_time': use_sim_time,
+            'sub_topic': '/livox/lidar2',
+            'pub_topic': '/converted_pointcloud2_lidar2'
+        }],
+        output='screen'
+    )
     
     ld = LaunchDescription()
     ld.add_action(use_sim_time_arg)
     ld.add_action(livox_custom_topic_arg)
     ld.add_action(livox_pcloud_topic_arg)
     ld.add_action(livox_to_pointcloud2_node)
+    ld.add_action(livox_to_pointcloud2_node_lidar2)
 
     return ld
 
